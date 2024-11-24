@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Mulish } from "next/font/google";
 import "./globals.css";
+
+const mulish = Mulish({
+  subsets: ["latin-ext"],
+});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${mulish.className} antialiased`}>{children}</body>
     </html>
   );
 }
