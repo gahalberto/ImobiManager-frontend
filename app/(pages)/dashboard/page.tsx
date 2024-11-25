@@ -1,10 +1,12 @@
 "use client";
+import Navbar from "@/app/_components/Nav";
 import { LogOutIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const DashboardPage = () => {
   return (
     <div>
+      <Navbar />
       <h1>Dashboard</h1>
 
       <div

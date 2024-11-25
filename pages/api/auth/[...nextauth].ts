@@ -27,9 +27,9 @@ export const authOptions: NextAuthOptions = {
           if (user) {
             console.log("Usuário autorizado:", user);
             return {
-              id: user.id,
-              name: user.firstName,
-              email: user.email,
+              id: user.user.id,
+              name: user.user.firstName,
+              email: user.user.email,
             };
           }
 
@@ -54,6 +54,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        console.log(`----------------------`);
+        console.log(user);
         token.id = user.id;
         token.email = user.email;
       }

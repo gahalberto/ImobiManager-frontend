@@ -20,6 +20,7 @@ import { z } from "zod";
 import CustomButton from "../button";
 import { Separator } from "../ui/separator";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 // Componente do Formulário de Login
 
@@ -42,7 +43,7 @@ export function LoginForm() {
     try {
       setLoading(true);
       const response = await signIn("credentials", {
-        redirect: true,
+        redirect: false,
         email: data.email,
         password: data.password,
       });
@@ -50,11 +51,14 @@ export function LoginForm() {
       if (response?.error) {
         setErrorMessage("E-mail e/ou senha inválidos.");
       }
+
       setLoading(false);
     } catch (error: any) {
       if (error.response) {
         setErrorMessage(error.response.data.error || "Erro desconhecido");
       }
+    } finally {
+      redirect("/dashboard");
     }
   };
 
