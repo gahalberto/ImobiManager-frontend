@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/app/_components/ui/sheet";
 import { LayoutDashboard, LogOutIcon, MenuIcon } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { signOut, useSession } from "next-auth/react";
