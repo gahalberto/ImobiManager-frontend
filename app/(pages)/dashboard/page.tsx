@@ -1,21 +1,22 @@
 "use client";
 import Navbar from "@/app/_components/Nav";
-import { LogOutIcon } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { Button } from "@/app/_components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 const DashboardPage = () => {
   return (
-    <div>
+    <>
       <Navbar />
-      <h1>Dashboard</h1>
-
-      <div
-        className="cursor-pointer p-3 text-blue-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors flex items-center gap-2"
-        onClick={() => signOut()}
-      >
-        <LogOutIcon /> Sair
+      <div className="space-y-6 p-6">
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <Button className="rounded-full bg-blue-600 p-5">
+            Adicionar Imóvel
+            <PlusIcon className="ml-2" />
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

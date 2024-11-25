@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LogOutIcon, MenuIcon } from "lucide-react";
+import { LayoutDashboard, LogOutIcon, MenuIcon } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -32,12 +32,22 @@ const Navbar = () => {
             {session?.user ? (
               <>
                 <SheetTitle>Olá, {session.user.name}</SheetTitle>
-                <SheetDescription className="flex justify-center p-3" asChild>
-                  <div
-                    className="flex text-center cursor-pointer p-3 text-blue-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2"
-                    onClick={() => signOut()}
-                  >
-                    <LogOutIcon size={20} /> Sair
+                <SheetDescription
+                  className="flex-col justify-center p-3"
+                  asChild
+                >
+                  <div>
+                    <Link href="/dashboard">
+                      <div className="flex text-center cursor-pointer p-3 text-blue-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2">
+                        <LayoutDashboard size={20} /> Dashboard
+                      </div>
+                    </Link>
+                    <div
+                      className="flex text-center cursor-pointer p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2"
+                      onClick={() => signOut()}
+                    >
+                      <LogOutIcon size={20} /> Sair
+                    </div>
                   </div>
                 </SheetDescription>
               </>
@@ -52,7 +62,7 @@ const Navbar = () => {
             )}
           </SheetHeader>
           <Separator className="mt-5 mb-5" />
-          <div className="flex flex-col justify-center items-center gap-5">
+          <div className="flex flex-col gap-5">
             <Link
               href="/"
               className={`w-full text-center py-4  ${
