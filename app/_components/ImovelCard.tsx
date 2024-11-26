@@ -18,14 +18,14 @@ const ImovelCard = ({ imovel }: { imovel: propertyType }) => {
     <Card>
       <CardContent className="p-0">
         {firstPhoto && imageUrl && (
-          <div className="relative w-full h-[150px] overflow-hidden">
+          <div className="relative">
             <Image
               src={imageUrl}
               alt={`Foto do imóvel ${imovel.title}`}
-              style={{ objectFit: "cover", objectPosition: "center" }}
-              className="object-center"
-              width={500} //
-              height={500} //
+              className="object-cover object-center"
+              width={500} // Define a largura
+              height={500} // Define a altura
+              priority // Adiciona prioridade ao carregamento da imagem
             />
           </div>
         )}

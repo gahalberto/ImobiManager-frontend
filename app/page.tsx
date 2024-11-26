@@ -1,4 +1,3 @@
-import Navbar from "@/app/_components/Nav";
 import { propertyType } from "@/app/_types/propertyType";
 import { api } from "@/app/_utils/api";
 import ImovelFilterSection from "./_components/imovel-filter";
@@ -17,7 +16,6 @@ const HomePage = async () => {
 
   return (
     <>
-      <Navbar />
       <ImovelFilterSection />
     </>
   );

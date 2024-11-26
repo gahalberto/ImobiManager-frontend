@@ -21,26 +21,27 @@ import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  {
-    /* O hook useSession() retorna um objeto com a propriedade user, que 
-    contém os dados do usuário autenticado. */
-  }
-  {
-    /* O hook usePathname() retorna a URL atual da página. */
-  }
   const { data: session } = useSession();
   const pathname = usePathname();
 
   return (
     <nav className="flex justify-between items-center border-b border-solid px-8 py-4 bg-slate-100">
-      {/* ESQUERDA - LOGO  */}
+      {/* LOGO */}
       <Link href="/">
-        <Image src="/logo.png" alt="Logo" width={200} height={50} />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={200} // Define a largura
+          height={50} // Define a altura
+          style={{ width: "100%", height: "auto" }} // Adicionando 'height: auto' para manter a proporção
+          priority // Se for uma imagem acima da dobra, use "priority" para otimizar o carregamento
+        />{" "}
       </Link>
-      {/* DIREITA - LINKS */}
+
+      {/* MENU */}
       <Sheet>
         <SheetTrigger>
-          <MenuIcon />
+          <MenuIcon className="text-xl cursor-pointer" />
         </SheetTrigger>
         <SheetContent>
           <SheetHeader className="flex justify-center">
@@ -52,11 +53,12 @@ const Navbar = () => {
                   asChild
                 >
                   <div>
+                    {/* Links no Menu */}
                     <Link href="/dashboard">
                       <div
                         className={`flex text-center cursor-pointer p-3 ${
                           pathname === "/dashboard" ? "text-blue-600" : ""
-                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                        } hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
                       >
                         <LayoutDashboard size={20} /> Dashboard
                       </div>
@@ -68,7 +70,7 @@ const Navbar = () => {
                           pathname === "/dashboard/imoveis"
                             ? "text-blue-600"
                             : ""
-                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                        } hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
                       >
                         <HousePlug size={20} /> Todos os imóveis
                       </div>
@@ -80,12 +82,13 @@ const Navbar = () => {
                           pathname === "/dashboard/imoveis/criar"
                             ? "text-blue-600"
                             : ""
-                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                        } hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
                       >
                         <HousePlusIcon size={20} /> Adicionar Imóvel
                       </div>
                     </Link>
 
+                    {/* Logout */}
                     <div
                       className="flex text-center cursor-pointer p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2"
                       onClick={() => signOut()}
@@ -106,12 +109,13 @@ const Navbar = () => {
             )}
           </SheetHeader>
           <Separator className="mt-5 mb-5" />
+
           <div className="flex flex-col gap-5">
             <Link
               href="/"
-              className={`w-full text-center py-4  ${
+              className={`w-full text-center py-4 ${
                 pathname === "/" ? "text-blue-600" : ""
-              }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+              } hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
             >
               Imóveis
             </Link>
