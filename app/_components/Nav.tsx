@@ -9,12 +9,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { LayoutDashboard, LogOutIcon, MenuIcon } from "lucide-react";
+import {
+  HousePlug,
+  HousePlusIcon,
+  LayoutDashboard,
+  LogOutIcon,
+  MenuIcon,
+} from "lucide-react";
 import { Separator } from "./ui/separator";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+  {
+    /* O hook useSession() retorna um objeto com a propriedade user, que 
+    contém os dados do usuário autenticado. */
+  }
+  {
+    /* O hook usePathname() retorna a URL atual da página. */
+  }
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -40,10 +53,39 @@ const Navbar = () => {
                 >
                   <div>
                     <Link href="/dashboard">
-                      <div className="flex text-center cursor-pointer p-3 text-blue-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2">
+                      <div
+                        className={`flex text-center cursor-pointer p-3 ${
+                          pathname === "/dashboard" ? "text-blue-600" : ""
+                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                      >
                         <LayoutDashboard size={20} /> Dashboard
                       </div>
                     </Link>
+
+                    <Link href="/dashboard/imoveis">
+                      <div
+                        className={`flex text-center cursor-pointer p-3 ${
+                          pathname === "/dashboard/imoveis"
+                            ? "text-blue-600"
+                            : ""
+                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                      >
+                        <HousePlug size={20} /> Todos os imóveis
+                      </div>
+                    </Link>
+
+                    <Link href="/dashboard/imoveis/criar">
+                      <div
+                        className={`flex text-center cursor-pointer p-3 ${
+                          pathname === "/dashboard/imoveis/criar"
+                            ? "text-blue-600"
+                            : ""
+                        }  hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
+                      >
+                        <HousePlusIcon size={20} /> Adicionar Imóvel
+                      </div>
+                    </Link>
+
                     <div
                       className="flex text-center cursor-pointer p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2"
                       onClick={() => signOut()}

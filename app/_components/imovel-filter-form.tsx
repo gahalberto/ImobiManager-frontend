@@ -11,9 +11,19 @@ import {
   DrawerClose,
 } from "@/app/_components/ui/drawer";
 import { Button } from "./ui/button";
+import CustomButton from "./button";
+import { FilterIcon } from "lucide-react";
+import { FilterValues } from "../_types/filterType";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const PropertyFilter = ({ onFilter }: { onFilter: (filters: any) => void }) => {
+{
+  /* Componente de filtro de propriedades */
+}
+
+const PropertyFilter = ({
+  onFilter,
+}: {
+  onFilter: (filters: FilterValues) => void;
+}) => {
   const [open, setOpen] = React.useState(false);
   const [filters, setFilters] = useState({
     price_min: "",
@@ -27,40 +37,59 @@ const PropertyFilter = ({ onFilter }: { onFilter: (filters: any) => void }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Remove o "R$", pontos de milhar e qualquer outro caractere que não seja número ou ponto
-    const cleanValue = value.replace(/[^\d.-]/g, "");
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: cleanValue,
-    }));
+    // Para os campos de preço (price_min e price_max), remove tudo que não for número ou ponto
+    if (name === "price_min" || name === "price_max") {
+      const cleanValue = value.replace(/[^\d.-]/g, "");
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: cleanValue,
+      }));
+    } else {
+      // Para os outros campos, permite qualquer caractere (como no campo cidade)
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: value,
+      }));
+    }
   };
 
-  // Função para enviar os filtros para o backend
+  {
+    /* Função para enviar os filtros para o componente pai e 
+    fechar o drawer após o envio */
+  }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // A função cleanValue agora é usada para garantir que valores limpos sejam enviados
-    const filtersToSend = {
+    const filtersToSend: FilterValues = {
       ...filters,
       price_min: filters.price_min
-        ? parseFloat(filters.price_min.replace(",", "."))
+        ? filters.price_min
+            .replace(/\./g, "") // Remove todos os pontos de milhar
+            .replace(",", ".") // Substitui a vírgula por ponto
         : "",
       price_max: filters.price_max
-        ? parseFloat(filters.price_max.replace(",", "."))
+        ? filters.price_max
+            .replace(/\./g, "") // Remove todos os pontos de milhar
+            .replace(",", ".") // Substitui a vírgula por ponto
         : "",
     };
 
-    console.log(filtersToSend); // Log para debug
-
-    onFilter(filtersToSend); // Envia os filtros para o componente pai
-    setOpen(false); // Fecha o drawer
+    onFilter(filtersToSend);
+    setOpen(false);
   };
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger>
-        <div>Filtrar Imóveis</div>
+      <DrawerTrigger asChild>
+        <div className="flex  m-6 justify-center items-center">
+          <CustomButton
+            type="button"
+            label="Filtrar Imóveis"
+            color="bg-blue-600"
+            icon={<FilterIcon />}
+            onClick={() => setOpen(true)}
+          />
+        </div>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -135,7 +164,7 @@ const PropertyFilter = ({ onFilter }: { onFilter: (filters: any) => void }) => {
 
         <DrawerFooter>
           <Button className="bg-blue-600 text-white" onClick={handleSubmit}>
-            Filtrar
+            <FilterIcon /> Filtrar
           </Button>
         </DrawerFooter>
 

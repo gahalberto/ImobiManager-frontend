@@ -40,17 +40,13 @@ export const propertySchema = z.object({
   bedrooms: z.number().min(1, {
     message: "O número de quartos é obrigatório",
   }),
-  images: z
-    .any()
-    .optional()
-    .refine((value) => {
-      if (!value) return true; // Campo opcional
-      if (typeof window !== "undefined" && value instanceof FileList) {
-        return true; // No cliente, valide como FileList
-      }
-      if (Array.isArray(value)) {
-        return value.every((file) => typeof file === "string"); // No servidor, valide como array de strings
-      }
-      return false;
-    }, "Imagens devem ser enviadas como FileList no cliente ou array de strings no servidor"),
+  images: z.any().refine((value) => {
+    if (typeof window !== "undefined" && value instanceof FileList) {
+      return true; // No cliente, valide como FileList
+    }
+    if (Array.isArray(value)) {
+      return value.every((file) => typeof file === "string"); // No servidor, valide como array de strings
+    }
+    return false;
+  }, "Selecione pelo menos uma imagem"),
 });

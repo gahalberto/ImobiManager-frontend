@@ -17,7 +17,7 @@ import { redirect } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${metadata.title} -   `,
+    title: `${metadata.title} -  Crie uma conta`,
   };
 }
 

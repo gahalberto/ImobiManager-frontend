@@ -1,28 +1,25 @@
 import AddImovelButton from "@/app/_components/add-imovel-button";
-import ImovelCard from "@/app/_components/ImovelCard";
+import ImovelFilterSection from "@/app/_components/imovel-filter";
 import Navbar from "@/app/_components/Nav";
-import { propertyType } from "@/app/_types/propertyType";
-import { api } from "@/app/_utils/api";
 
 const DashboardPage = async () => {
-  const imoveis = (await api.get("/properties")) as { data: propertyType[] };
-  console.log(imoveis.data);
-
   return (
     <>
+      {/* Responsividade: Navbar fixa no topo da tela */}
       <Navbar />
+
+      {/* Título e um Modal do Shadcn (Dialog) de Adicionar um Imóvel */}
+      {/* Dentro do modal, tem um formulário que também está componetizado, 
+      o form pode ser usado em outras páginas sem necessariamente dentro de um modal 
+      Dialog do shadcn */}
       <div className="space-y-6 p-6">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <AddImovelButton />
         </div>
 
-        {/* Responsividade: 1 card por linha em mobile, 3 cards por linha em desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {imoveis.data.map((imovel) => (
-            <ImovelCard key={imovel.id} imovel={imovel} />
-          ))}
-        </div>
+        {/* Componente que busca o imóvel! */}
+        <ImovelFilterSection />
       </div>
     </>
   );

@@ -9,12 +9,20 @@ type Props = {
   variant?: "primary" | "secondary";
   type?: "button" | "submit" | "reset";
   icon?: ReactNode;
+  onClick?: () => void;
 };
 
-const CustomButton = ({ label, href, color, type = "button", icon }: Props) => {
+const CustomButton = ({
+  label,
+  href,
+  color,
+  type = "button",
+  icon,
+  onClick,
+}: Props) => {
   return (
     <Link href={href || ""}>
-      <Button type={type} className={`${color} w-full`}>
+      <Button type={type} className={`${color} w-full`} onClick={onClick}>
         {icon ? icon : null}
         {label}
       </Button>

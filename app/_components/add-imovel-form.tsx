@@ -28,6 +28,7 @@ import { MoneyInput } from "./money-input";
 import { formatCEP } from "../_utils/cepFormat";
 import { CreateImovel } from "../_actions/create-imovel";
 import { redirect } from "next/navigation";
+import TextEditor from "./text-editor";
 
 const AddImovelForm = () => {
   const form = useForm<z.infer<typeof propertySchema>>({
@@ -376,7 +377,7 @@ const AddImovelForm = () => {
           )}
         />
 
-        {/* Descrição */}
+        {/* Descrição com Tiptap Componetizado em TextEditor */}
         <FormField
           control={form.control}
           name="description"
@@ -384,10 +385,9 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Descrição</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Insira uma descrição..."
-                  {...field}
-                  disabled={loading}
+                <TextEditor
+                  value={field.value}
+                  onChange={(value) => field.onChange(value)}
                 />
               </FormControl>
               <FormMessage />

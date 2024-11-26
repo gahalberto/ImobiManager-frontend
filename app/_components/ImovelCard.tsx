@@ -3,6 +3,11 @@ import { propertyType } from "../_types/propertyType";
 import { Card, CardContent } from "./ui/card";
 import CustomButton from "./button";
 
+{
+  /* ImovelCard é um componente que recebe um imóvel e renderiza um
+   card com as informações do imóvel. */
+}
+
 const ImovelCard = ({ imovel }: { imovel: propertyType }) => {
   const firstPhoto = imovel.photos && imovel.photos[0];
   const imageUrl = firstPhoto
