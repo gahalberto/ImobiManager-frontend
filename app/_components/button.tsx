@@ -6,6 +6,7 @@ type Props = {
   label: string;
   href?: string;
   color: string;
+  variant?: "primary" | "secondary";
   type?: "button" | "submit" | "reset";
   icon?: ReactNode;
 };

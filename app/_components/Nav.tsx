@@ -21,7 +21,9 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between items-center border-b border-solid px-8 py-4 bg-slate-100">
       {/* ESQUERDA - LOGO  */}
-      <Image src="/logo.png" alt="Logo" width={200} height={50} />
+      <Link href="/">
+        <Image src="/logo.png" alt="Logo" width={200} height={50} />
+      </Link>
       {/* DIREITA - LINKS */}
       <Sheet>
         <SheetTrigger>

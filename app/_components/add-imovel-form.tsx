@@ -32,17 +32,17 @@ const AddImovelForm = () => {
   const form = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
-      title: "TESTE IMAGENS",
-      description: "TESTE IMAGENS",
+      title: "",
+      description: "",
       company: "1",
-      address_zipcode: "01121000",
+      address_zipcode: "",
       address_street: "",
-      address_number: "122",
-      address_complement: "11",
+      address_number: "",
+      address_complement: "",
       address_neighborhood: "",
       address_city: "",
       address_state: "",
-      price: 11,
+      price: 0,
       bedrooms: 1,
       bathrooms: 1,
       images: null,
@@ -96,20 +96,22 @@ const AddImovelForm = () => {
     try {
       const formData = new FormData();
 
-      for (const [key, value] of Object.entries(data) as [
-        keyof typeof data,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        any
-      ][]) {
+      for (const [key, value] of Object.entries(data)) {
+        // Garantindo que os campos "bedrooms", "bathrooms" e "company" sejam números
         if (key === "images" && value) {
           const imagesArray = Array.from(value as FileList);
           imagesArray.forEach((file) => formData.append("images", file));
+        } else if (
+          key === "bedrooms" ||
+          key === "bathrooms" ||
+          key === "price"
+        ) {
+          formData.append(key, value.toString()); // Convertendo valores numéricos para string
         } else {
           formData.append(key, String(value)); // Converte os valores para string
         }
       }
 
-      console.log("FormData enviado:");
       for (const [key, value] of formData.entries()) {
         console.log(`${key}:`, value);
       }
@@ -133,14 +135,14 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Titúlo</FormLabel>
               <FormControl>
-                <Input placeholder="Insira um titúlo..." {...field} />
+                <Input placeholder="Insira um título..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Construtora  */}
+        {/* Construtora */}
         <FormField
           control={form.control}
           name="company"
@@ -148,12 +150,12 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Construtora</FormLabel>
               <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value.toString()}
+                onValueChange={(value) => field.onChange(value)}
+                defaultValue={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Escolha pelo menos um empreedimento" />
+                    <SelectValue placeholder="Escolha pelo menos um empreendimento" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -178,8 +180,11 @@ const AddImovelForm = () => {
               <FormLabel>Qtd. de Quartos:</FormLabel>
               <FormControl>
                 <Input
+                  type="number"
                   placeholder="Insira quantidade de quartos..."
                   {...field}
+                  value={field.value.toString()}
+                  onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
                   disabled={loading}
                 />
               </FormControl>
@@ -197,8 +202,11 @@ const AddImovelForm = () => {
               <FormLabel>Qtd. de Banheiros:</FormLabel>
               <FormControl>
                 <Input
+                  type="number"
                   placeholder="Insira quantidade de banheiros..."
                   {...field}
+                  value={field.value.toString()}
+                  onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
                   disabled={loading}
                 />
               </FormControl>
@@ -406,7 +414,7 @@ const AddImovelForm = () => {
             </FormItem>
           )}
         />
-
+        {/* Botão de adicionar */}
         <Button className="bg-blue-600 w-full" type="submit" disabled={loading}>
           {loading ? "Carregando..." : "Adicionar"}
         </Button>

@@ -6,8 +6,6 @@ import { api } from "../_utils/api";
 import { getServerSession } from "next-auth";
 
 export async function CreateImovel(formData: FormData) {
-  console.log(`---------------------`);
-  console.log(`formData: ${formData}`);
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
