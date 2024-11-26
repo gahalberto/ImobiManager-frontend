@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Form,
   FormControl,
@@ -19,92 +20,108 @@ import { useForm } from "react-hook-form";
 import { propertySchema } from "../_schemas/propertySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { companyType } from "../_types/companyType";
 import { api } from "../_utils/api";
 import { Button } from "./ui/button";
 import { MoneyInput } from "./money-input";
 import { formatCEP } from "../_utils/cepFormat";
-import axios from "axios";
+import { CreateImovel } from "../_actions/create-imovel";
 
 const AddImovelForm = () => {
   const form = useForm<z.infer<typeof propertySchema>>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
-      title: "",
-      description: "",
-      companies: "",
-      address_zipcode: "",
+      title: "TESTE IMAGENS",
+      description: "TESTE IMAGENS",
+      company: "1",
+      address_zipcode: "01121000",
       address_street: "",
-      address_number: "",
-      address_complement: "",
+      address_number: "122",
+      address_complement: "11",
       address_neighborhood: "",
       address_city: "",
       address_state: "",
-      price: 0,
+      price: 11,
       bedrooms: 1,
       bathrooms: 1,
-      images: [],
+      images: null,
     },
   });
 
+  const { setValue, watch, setFocus } = form;
+  const [loading, setLoading] = useState(false);
   const [companies, setCompanies] = useState<companyType[]>([]);
+  const cep = watch("address_zipcode");
 
+  // Buscar endereço por CEP
+  const fetchAddressByCEP = async (cep: string) => {
+    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar o endereço");
+    }
+    return response.json();
+  };
+
+  useEffect(() => {
+    if (cep && cep.replace("-", "").length === 8) {
+      fetchAddressByCEP(cep.replace("-", ""))
+        .then((data) => {
+          if (!data.erro) {
+            setValue("address_street", data.logradouro);
+            setValue("address_neighborhood", data.bairro);
+            setValue("address_city", data.localidade);
+            setValue("address_state", data.uf);
+            setFocus("address_number");
+          }
+        })
+        .catch((error) => console.error("Erro ao buscar o endereço:", error));
+    }
+  }, [cep, setValue, setFocus]);
+
+  // Buscar construtoras
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
         const response = await api.get("/company");
         setCompanies(response.data);
-        console.log("response", response);
       } catch (error) {
-        console.error("Failed to fetch companies:", error);
+        console.error("Erro ao buscar construtoras:", error);
       }
     };
-
     fetchCompanies();
   }, []);
 
-  // Função para buscar dados do CEP
-  const fetchAddressByZipcode = useCallback(
-    async (zipcode: string) => {
-      console.log("Fetching address for ZIP code:", zipcode); // Log para verificar o CEP
-      try {
-        const response = await axios.get(
-          `https://viacep.com.br/ws/${zipcode}/json/`
-        );
-        const data = response.data;
-        console.log("API Response:", data); // Log para verificar a resposta da API
+  const onSubmit = async (data: z.infer<typeof propertySchema>) => {
+    try {
+      const formData = new FormData();
 
-        if (!data.erro) {
-          // Preencher os campos do formulário com os dados recebidos
-          form.setValue("address_street", data.logradouro);
-          form.setValue("address_neighborhood", data.bairro);
-          form.setValue("address_city", data.localidade);
-          form.setValue("address_state", data.uf);
+      for (const [key, value] of Object.entries(data) as [
+        keyof typeof data,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        any
+      ][]) {
+        if (key === "images" && value) {
+          const imagesArray = Array.from(value as FileList);
+          imagesArray.forEach((file) => formData.append("images", file));
         } else {
-          console.error("CEP não encontrado.");
+          formData.append(key, String(value)); // Converte os valores para string
         }
-      } catch (error) {
-        console.error("Erro ao buscar endereço:", error);
       }
-    },
-    [form]
-  );
 
-  // Efeito para preencher os campos quando o CEP mudar
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      console.log("Current ZIP code value:", value.address_zipcode); // Log para verificar o valor do CEP
-      if (value.address_zipcode?.length === 7) {
-        // Verifica se o CEP tem 8 dígitos
-        fetchAddressByZipcode(value.address_zipcode);
+      console.log("FormData enviado:");
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
       }
-    });
 
-    return () => subscription.unsubscribe(); // Limpar a assinatura
-  }, [form, fetchAddressByZipcode]);
-
-  const onSubmit = () => {};
+      setLoading(true);
+      const response = await CreateImovel(formData);
+      console.log("Resposta do servidor:", response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Erro ao enviar formulário:", error);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -126,11 +143,14 @@ const AddImovelForm = () => {
         {/* Construtora  */}
         <FormField
           control={form.control}
-          name="companies"
+          name="company"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Construtora</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value.toString()}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Escolha pelo menos um empreedimento" />
@@ -160,6 +180,7 @@ const AddImovelForm = () => {
                 <Input
                   placeholder="Insira quantidade de quartos..."
                   {...field}
+                  disabled={loading}
                 />
               </FormControl>
               <FormMessage />
@@ -178,6 +199,7 @@ const AddImovelForm = () => {
                 <Input
                   placeholder="Insira quantidade de banheiros..."
                   {...field}
+                  disabled={loading}
                 />
               </FormControl>
               <FormMessage />
@@ -197,9 +219,10 @@ const AddImovelForm = () => {
                   placeholder="Insira o CEP..."
                   {...field}
                   value={formatCEP(field.value)}
-                  onChange={(e) => {
+                  onBlur={(e) => {
                     field.onChange(formatCEP(e.target.value));
                   }}
+                  disabled={loading}
                 />
               </FormControl>
               <FormMessage />
@@ -215,7 +238,11 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Rua:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira a rua..." {...field} />
+                <Input
+                  placeholder="Insira a rua..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -230,7 +257,12 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Número:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o número..." {...field} />
+                <Input
+                  type="number"
+                  placeholder="Insira o número..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -245,7 +277,11 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Complemento:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o complemento..." {...field} />
+                <Input
+                  placeholder="Insira o complemento..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -260,7 +296,11 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Bairro:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o bairro..." {...field} />
+                <Input
+                  placeholder="Insira o bairro..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -275,7 +315,11 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Cidade:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira a cidade..." {...field} />
+                <Input
+                  placeholder="Insira a cidade..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -290,22 +334,11 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Estado:</FormLabel>
               <FormControl>
-                <Input placeholder="Insira o estado..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Descrição */}
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Descrição</FormLabel>
-              <FormControl>
-                <Input placeholder="Insira uma descrição..." {...field} />
+                <Input
+                  placeholder="Insira o estado..."
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -321,14 +354,61 @@ const AddImovelForm = () => {
             <FormItem>
               <FormLabel>Preço</FormLabel>
               <FormControl>
-                <MoneyInput placeholder="R$ ...." {...field} />
+                <MoneyInput
+                  placeholder="R$ ...."
+                  value={field.value}
+                  onValueChange={({ floatValue }) => field.onChange(floatValue)}
+                  onBlur={field.onBlur}
+                  disabled={loading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className="bg-blue-600" type="submit">
-          Adicionar
+
+        {/* Descrição */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Descrição</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Insira uma descrição..."
+                  {...field}
+                  disabled={loading}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Imagens */}
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Imagens</FormLabel>
+              <FormControl>
+                <Input
+                  id="images"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => field.onChange(e.target.files)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button className="bg-blue-600 w-full" type="submit" disabled={loading}>
+          {loading ? "Carregando..." : "Adicionar"}
         </Button>
       </form>
     </Form>

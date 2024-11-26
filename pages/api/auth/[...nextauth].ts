@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
               id: user.user.id,
               name: user.user.firstName,
               email: user.user.email,
+              token: user.token,
             };
           }
 
@@ -54,25 +55,19 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        console.log(`----------------------`);
-        console.log(user);
-        token.id = user.id;
+        token.id = user.id as string;
         token.email = user.email;
+        token.accessToken = user.token;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user = {
-          ...session.user,
-          id: token.id,
+          id: token.id as string, // Certifique-se de que é uma string
           name: token.name,
           email: token.email,
-        } as {
-          id?: string;
-          name?: string | null | undefined;
-          email?: string | null | undefined;
-          image?: string | null | undefined;
+          token: token.accessToken as string,
         };
       }
       return session;
