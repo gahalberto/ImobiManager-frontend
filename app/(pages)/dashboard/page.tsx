@@ -1,12 +1,11 @@
 import AddImovelButton from "@/app/_components/add-imovel-button";
-import ImovelFilterSection from "@/app/_components/imovel-filter";
-import Navbar from "@/app/_components/Nav";
+import { PriceCitiesChart } from "./_components/priceCities";
+import { PriceTimeChart } from "./_components/pricesByTime";
 
 const DashboardPage = async () => {
   return (
     <>
       {/* Responsividade: Navbar fixa no topo da tela */}
-      <Navbar />
 
       {/* Título e um Modal do Shadcn (Dialog) de Adicionar um Imóvel */}
       {/* Dentro do modal, tem um formulário que também está componetizado, 
@@ -19,7 +18,8 @@ const DashboardPage = async () => {
         </div>
 
         {/* Componente que busca o imóvel! */}
-        <ImovelFilterSection />
+        <PriceCitiesChart />
+        <PriceTimeChart />
       </div>
     </>
   );
