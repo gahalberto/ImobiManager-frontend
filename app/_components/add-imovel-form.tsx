@@ -27,6 +27,7 @@ import { Button } from "./ui/button";
 import { MoneyInput } from "./money-input";
 import { formatCEP } from "../_utils/cepFormat";
 import { CreateImovel } from "../_actions/create-imovel";
+import { redirect } from "next/navigation";
 
 const AddImovelForm = () => {
   const form = useForm<z.infer<typeof propertySchema>>({
@@ -118,7 +119,7 @@ const AddImovelForm = () => {
 
       setLoading(true);
       const response = await CreateImovel(formData);
-      console.log("Resposta do servidor:", response);
+      if (response) redirect("/dashboard/imoveis");
       setLoading(false);
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
