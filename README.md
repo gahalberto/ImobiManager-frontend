@@ -5,27 +5,6 @@ O ImobiManager é um projeto frontend desenvolvido para gerenciar propriedades i
 ## Principais Desafios \
 Maior desafio foi instalar o NEXT15 e pesquisar as mudanças e melhorias, também foi um desafio trabalhar com imagens, eu tive mais desafios com o backend quando fui fazer testes com JEST E SUPERTEST, eu nunca trabalhei com essas ferramentas e foi um desafio, após assistir vídeos dos meus cursos na rocketseat + YouTube + alura, consegui trabalhar bem os testes mas foi um aprendizado incrível
 
-## Capturas de tela 
-
-## Capturas de Tela
-
-### Página Inicial
-![Home](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/home.png)
-
-### Dashboard
-![Dashboard](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/dashboard.png)
-
-### Formulário de Cadastro
-![Formulário](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form.png)
-![Formulário - Parte 2](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form2.png)
-
-### Página de Login
-![Login](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/login.png)
-
-### Página de Registro
-![Registro](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/register.png)
-
-
 
 ## Índice
 
@@ -80,6 +59,26 @@ O projeto possui a seguinte estrutura de diretórios:
 - **middleware.ts**: Middleware de controle de autenticação e permissões.
 - **next.config.ts**: Configurações do Next.js.
 - **tailwind.config.ts**: Configuração do Tailwind CSS.
+
+## Capturas de Tela
+
+### Página Inicial
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/home.png" alt="Home" width="200" />
+
+### Dashboard
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/dashboard.png" alt="Dashboard" width="200" />
+
+### Formulário de Cadastro
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form.png" alt="Formulário" width="200" />
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form2.png" alt="Formulário - Parte 2" width="200" />
+
+### Página de Login
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/login.png" alt="Login" width="200" />
+
+### Página de Registro
+<img src="https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/register.png" alt="Registro" width="200" />
+
+
 
 ## Instalação
 
