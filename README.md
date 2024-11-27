@@ -5,6 +5,28 @@ O ImobiManager é um projeto frontend desenvolvido para gerenciar propriedades i
 ## Principais Desafios \
 Maior desafio foi instalar o NEXT15 e pesquisar as mudanças e melhorias, também foi um desafio trabalhar com imagens, eu tive mais desafios com o backend quando fui fazer testes com JEST E SUPERTEST, eu nunca trabalhei com essas ferramentas e foi um desafio, após assistir vídeos dos meus cursos na rocketseat + YouTube + alura, consegui trabalhar bem os testes mas foi um aprendizado incrível
 
+## Capturas de tela 
+
+## Capturas de Tela
+
+### Página Inicial
+![Home](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/home.png)
+
+### Dashboard
+![Dashboard](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/dashboard.png)
+
+### Formulário de Cadastro
+![Formulário](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form.png)
+![Formulário - Parte 2](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/form2.png)
+
+### Página de Login
+![Login](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/login.png)
+
+### Página de Registro
+![Registro](https://github.com/gahalberto/ImobiManager-frontend/blob/main/public/screenshots/register.png)
+
+
+
 ## Índice
 
 - [Visão Geral](#visão-geral)
