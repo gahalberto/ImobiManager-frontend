@@ -1,4 +1,12 @@
 import AddImovelForm from "@/app/_components/add-imovel-form";
+import { metadata } from "@/app/layout";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: `${metadata.title} - Adicionar Imóvel`,
+  };
+}
 
 const CreateImovelPage = () => {
   return (

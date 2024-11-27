@@ -1,9 +1,24 @@
 import SlideCarrouselImovel from "@/app/_components/carrousel-slide";
 import { api } from "@/app/_utils/api";
 import { Card, CardContent } from "@/app/_components/ui/card";
+import { metadata } from "@/app/layout";
+import { Metadata } from "next";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const imovel = await api.get(`/properties/${id}`);
+
+  return {
+    title: `${metadata.title} - ${imovel.data.title} - Nome do Site`,
+  };
+}
 
 const ImovelPage = async (props: {
   params: Params;

@@ -64,18 +64,6 @@ const Navbar = () => {
                       </div>
                     </Link>
 
-                    <Link href="/dashboard/imoveis">
-                      <div
-                        className={`flex text-center cursor-pointer p-3 ${
-                          pathname === "/dashboard/imoveis"
-                            ? "text-blue-600"
-                            : ""
-                        } hover:text-gray-800 hover:bg-gray-300 rounded transition-colors items-center gap-2`}
-                      >
-                        <HousePlug size={20} /> Todos os imóveis
-                      </div>
-                    </Link>
-
                     <Link href="/dashboard/imoveis/criar">
                       <div
                         className={`flex text-center cursor-pointer p-3 ${
