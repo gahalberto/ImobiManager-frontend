@@ -2,7 +2,7 @@
 
 O ImobiManager é um projeto frontend desenvolvido para gerenciar propriedades imobiliárias, integrando com o backend para fornecer uma interface intuitiva e eficiente para usuários. Este projeto utiliza o framework **Next.js 15**, juntamente com várias tecnologias modernas para criar uma experiência de usuário rica e segura.\
 \
-\## Principais Desafios com Frontend\
+## Principais Desafios \
 Maior desafio foi instalar o NEXT15 e pesquisar as mudanças e melhorias, também foi um desafio trabalhar com imagens, eu tive mais desafios com o backend quando fui fazer testes com JEST E SUPERTEST, eu nunca trabalhei com essas ferramentas e foi um desafio, após assistir vídeos dos meus cursos na rocketseat + YouTube + alura, consegui trabalhar bem os testes mas foi um aprendizado incrível
 
 ## Índice
