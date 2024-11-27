@@ -27,8 +27,9 @@ import { Button } from "./ui/button";
 import { MoneyInput } from "./money-input";
 import { formatCEP } from "../_utils/cepFormat";
 import { CreateImovel } from "../_actions/create-imovel";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import TextEditor from "./text-editor";
+import { ImovelPropsType } from "../_actions/chatgpt";
 
 const AddImovelForm = () => {
   const form = useForm<z.infer<typeof propertySchema>>({
@@ -50,6 +51,8 @@ const AddImovelForm = () => {
       images: null,
     },
   });
+
+  const router = useRouter(); // Hook para navegação
 
   const { setValue, watch, setFocus } = form;
   const [loading, setLoading] = useState(false);
@@ -94,6 +97,29 @@ const AddImovelForm = () => {
     fetchCompanies();
   }, []);
 
+  // Função para gerar a descrição com a IA
+  const gerarDescricaoComAI = async (dadosImovel: ImovelPropsType) => {
+    try {
+      const response = await fetch("/api/descriptionai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dadosImovel),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao gerar descrição");
+      }
+
+      const data = await response.json();
+      return data.description;
+    } catch (error) {
+      console.error("Erro ao gerar descrição com a IA:", error);
+      return "Erro ao gerar descrição. Tente novamente.";
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof propertySchema>) => {
     try {
       const formData = new FormData();
@@ -113,17 +139,21 @@ const AddImovelForm = () => {
           formData.append(key, String(value)); // Converte os valores para string
         }
       }
-
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       setLoading(true);
       const response = await CreateImovel(formData);
-      if (response) redirect("/dashboard/imoveis");
+      // Redireciona após sucesso
+      if (response) {
+        router.push("/dashboard");
+      } else {
+        console.error("Erro ao criar imóvel:", response.data);
+        alert("Não foi possível criar o imóvel. Tente novamente.");
+      }
+
       setLoading(false);
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -387,13 +417,22 @@ const AddImovelForm = () => {
               <FormControl>
                 <TextEditor
                   value={field.value}
-                  onChange={(value) => field.onChange(value)}
+                  onChange={(value) => field.onChange(value)} // Atualiza o valor da descrição no formulário
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <Button
+          onClick={async () => {
+            // Chama a função para gerar a descrição
+            const description = await gerarDescricaoComAI(form.getValues());
+            form.setValue("description", description); // Atualiza o valor no campo de descrição
+          }}
+        >
+          Gerar descrição com Inteligência Artificial
+        </Button>
 
         {/* Imagens */}
         <FormField

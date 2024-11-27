@@ -25,5 +25,5 @@ export default withAuth(
 
 export const config = {
   // Protege apenas as rotas do dashboard
-  matcher: ["/admin/:path*"], // Protege todas as rotas que começam com '/dashboard'
+  matcher: ["/dashboard/:path*"], // Protege todas as rotas que começam com '/dashboard'
 };
