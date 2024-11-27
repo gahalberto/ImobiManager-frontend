@@ -10,7 +10,6 @@ import {
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
 import {
-  HousePlug,
   HousePlusIcon,
   LayoutDashboard,
   LogOutIcon,

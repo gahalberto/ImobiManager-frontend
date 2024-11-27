@@ -12,7 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const HomePage = async () => {
   const imoveis = (await api.get("/properties")) as { data: propertyType[] };
-  console.log(imoveis.data);
 
   return (
     <>
