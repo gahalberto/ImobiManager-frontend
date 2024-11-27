@@ -23,7 +23,7 @@ Maior desafio foi instalar o NEXT15 e pesquisar as mudanças e melhorias, també
 
  Uma melhoria importante do sistema é a **utilização do ChatGPT para criar descrições de imóveis utilizando técnicas avançadas de marketing**. Ao criar um novo imóvel no formulário, o usuário pode clicar em um botão para gerar automaticamente a descrição do imóvel com inteligência artificial, tornando o processo mais eficiente e garantindo uma abordagem atrativa para possíveis clientes.
 
-
+<b>Para a utilização da função, criar a descrição com Inteligencia Artificial, precisa ter uma chave da API da OpenAI</b>
 
 Também criei um dashboard com dois gráficos
 
